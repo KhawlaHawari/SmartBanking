@@ -193,10 +193,9 @@ Frontend will be available at: `http://localhost:5173`
 ## ⚙️ Environment Variables
 
 Create a `.env` file in `smart-banking/backend/`:
-
 ```env
 # AI Chatbot
-GEMINI_API_KEY=your_gemini_api_key_here
+GROQ_API_KEY=your_groq_api_key_here
 
 # CORS
 CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
@@ -222,20 +221,20 @@ API_PORT=8023
 MAX_UPLOAD_SIZE_MB=10
 ```
 
-> Get a free Gemini API key at: https://aistudio.google.com/apikey
+> Get a free Groq API key at: https://console.groq.com
 
 ---
 
 ## 🤖 Chatbot
 
-The SmartBanking AI assistant is powered by **Google Gemini 2.0 Flash** via the `google-genai` SDK.
+The SmartBanking AI assistant is powered by **Groq (LLaMA 3)** via the `groq` SDK.
 
 **How it works:**
 1. On every request, the system prompt is dynamically built with full dataset context: row count, column names, churn rate, segment distribution, risk distribution, and model training metrics
 2. Conversation history is maintained per session (last 10 messages) using in-memory storage
 3. The assistant can answer questions about customer segments, risk levels, churn rates, model performance, and platform usage
 
-**Fallback behavior:** If the Gemini API is unavailable (quota exceeded or missing key), the chatbot falls back to a local keyword-based response system covering the most common analytics questions.
+**Fallback behavior:** If the Groq API is unavailable (quota exceeded or missing key), the chatbot falls back to a local keyword-based response system covering the most common analytics questions.
 
 ---
 
@@ -252,8 +251,8 @@ The SmartBanking AI assistant is powered by **Google Gemini 2.0 Flash** via the 
 
 ## 👥 Authors
 
-SmartBanking AI Platform — Final Year Project
+SmartBanking AI Platform — Khawla El Haouri
 
 ---
 
-*Built with FastAPI · React · scikit-learn · LightGBM · Google Gemini*
+*Built with FastAPI · React · scikit-learn · LightGBM · Groq*

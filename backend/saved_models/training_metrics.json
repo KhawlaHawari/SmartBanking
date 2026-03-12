@@ -1,0 +1,57 @@
+{
+  "segmentation": {
+    "model": "RandomForestClassifier(n=400, balanced)",
+    "accuracy": 0.844,
+    "f1_macro": 0.8208,
+    "ari_kmeans": -0.0032,
+    "ari_gmm": -0.0025,
+    "n_classes": 6,
+    "classes": [
+      "Active",
+      "Premium",
+      "Standard",
+      "VIP"
+    ],
+    "n_features_input": 33,
+    "train_size": 4000,
+    "test_size": 1000
+  },
+  "risk": {
+    "model": "GradientBoostingClassifier + CalibratedClassifierCV(isotonic)",
+    "auc_roc": 1.0,
+    "pr_auc": 1.0,
+    "recall": 1.0,
+    "precision": 1.0,
+    "f1": 1.0,
+    "brier": 0.0004,
+    "decision_threshold": 0.7376,
+    "class_distribution": {
+      "low_risk": 4985,
+      "high_risk": 15
+    }
+  },
+  "churn": {
+    "model": "RandomForestClassifier(n=400, balanced) + CalibratedClassifierCV(isotonic)",
+    "auc_roc": 1.0,
+    "f1": 0.9939,
+    "recall": 0.9878,
+    "precision": 1.0,
+    "brier": 0.0,
+    "decision_threshold": 0.99
+  },
+  "action": {
+    "model": "RandomForestClassifier(n=400, balanced)",
+    "accuracy": 0.917,
+    "f1_macro": 0.6773,
+    "top3_accuracy": 1.0,
+    "n_classes": 6,
+    "classes": [
+      "Engage",
+      "Monitor",
+      "Retain",
+      "Upgrade",
+      "Upsell"
+    ],
+    "n_features_input": 33
+  }
+}

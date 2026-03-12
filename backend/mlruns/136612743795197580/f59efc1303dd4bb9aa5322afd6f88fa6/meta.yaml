@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/DELL/Desktop/SmartBankingFinal/smart-banking/backend/mlruns/136612743795197580/f59efc1303dd4bb9aa5322afd6f88fa6/artifacts
+end_time: 1773065895290
+entry_point_name: ''
+experiment_id: '136612743795197580'
+lifecycle_stage: active
+run_id: f59efc1303dd4bb9aa5322afd6f88fa6
+run_name: risk
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1773065895024
+status: 3
+tags: []
+user_id: DELL

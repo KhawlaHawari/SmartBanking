@@ -1,0 +1,88 @@
+C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\app\utils\chat_engine.py:7: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+INFO:     Started server process [18004]
+INFO:     Waiting for application startup.
+2026-03-03 20:54:59,852 | INFO | app.main | Starting application lifespan
+2026-03-03 20:55:00,278 | INFO | app.load_data | Model artifact loaded: segmentation_model.pkl
+2026-03-03 20:55:00,284 | INFO | app.load_data | Model artifact loaded: le_segment.pkl
+2026-03-03 20:55:00,399 | INFO | app.load_data | Model artifact loaded: risk_model.pkl
+2026-03-03 20:55:00,402 | INFO | app.load_data | Model artifact loaded: risk_threshold.pkl
+2026-03-03 20:55:01,214 | INFO | app.load_data | Model artifact loaded: churn_model.pkl
+2026-03-03 20:55:01,219 | INFO | app.load_data | Model artifact loaded: churn_threshold.pkl
+2026-03-03 20:55:01,528 | INFO | app.load_data | Model artifact loaded: action_model.pkl
+2026-03-03 20:55:01,532 | INFO | app.load_data | Model artifact loaded: le_action.pkl
+2026-03-03 20:55:01,533 | INFO | app.load_data | Model artifact loaded: kmeans.pkl
+2026-03-03 20:55:01,534 | INFO | app.load_data | Model artifact loaded: training_metrics.json
+2026-03-03 20:55:01,534 | INFO | app.load_data | Model loading complete. loaded=True
+2026-03-03 20:55:04,341 | INFO | app.load_data | Dataset loaded: bank_customer_dataset.xlsx (4999 rows)
+2026-03-03 20:55:04,401 | INFO | app.load_data | EDA cache computed successfully
+2026-03-03 20:55:04,408 | INFO | app.database | Database initialized
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8021 (Press CTRL+C to quit)
+2026-03-03 20:55:07,635 | ERROR | app.utils.chat_engine | Gemini chat request failed: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 55, in error_remapped_callable
+    return callable_(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\grpc\_interceptor.py", line 276, in __call__
+    response, ignored_call = self._with_call(
+                             ^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\grpc\_interceptor.py", line 331, in _with_call
+    return call.result(), call
+           ^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\grpc\_channel.py", line 438, in result
+    raise self
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\grpc\_interceptor.py", line 314, in continuation
+    response, call = self._thunk(new_method).with_call(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\grpc\_channel.py", line 1173, in with_call
+    return _end_unary_response_blocking(state, call, True, None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\grpc\_channel.py", line 990, in _end_unary_response_blocking
+    raise _InactiveRpcError(state)  # pytype: disable=not-instantiable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.NOT_FOUND
+	details = "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods."
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.209.74:443 {grpc_status:5, grpc_message:"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods."}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\app\utils\chat_engine.py", line 117, in generate_chat_reply
+    response = model.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\google\generativeai\generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\google\ai\generativelanguage_v1beta\services\generative_service\client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\google\api_core\gapic_v1\method.py", line 128, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\google\api_core\retry\retry_base.py", line 216, in _retry_error_helper
+    raise final_exc from source_exc
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\google\api_core\retry\retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\google\api_core\timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\.venv\Lib\site-packages\google\api_core\grpc_helpers.py", line 57, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.

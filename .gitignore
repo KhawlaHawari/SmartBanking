@@ -1,0 +1,10 @@
+.venv
+.venv311
+__pycache__
+*.pyc
+*.pyo
+smartbank.db
+.env
+node_modules
+*.db
+.DS_Store

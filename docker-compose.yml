@@ -1,0 +1,27 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8023:8023"
+    volumes:
+      - ./backend/data:/app/data
+      - ./backend/saved_models:/app/saved_models
+      - ./mlruns:/app/mlruns
+    environment:
+      - PYTHONUNBUFFERED=1
+      - API_HOST=0.0.0.0
+      - API_PORT=8023
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - VITE_API_URL=http://localhost:8023
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

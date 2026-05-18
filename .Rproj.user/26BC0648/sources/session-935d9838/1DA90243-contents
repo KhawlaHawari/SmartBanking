@@ -1,0 +1,91 @@
+# ============================================================
+# STEP 5 - PCA with FactoMineR
+# ============================================================
+# Prerequisites: churn_s in memory, or read it back:
+#   churn_s <- readRDS("churn_sample.rds")
+
+library(FactoMineR)
+library(factoextra)
+
+# ---- 5.1 Build the data.frame in the order PCA() expects ----
+# Order: 8 active quanti -> 2 quanti.sup -> 4 quali.sup
+pca_df <- churn_s[, c(
+  # active
+  "CreditScore", "Age", "Tenure", "Balance",
+  "NumOfProducts", "EstimatedSalary",
+  "Satisfaction.Score", "Point.Earned",
+  # quanti.sup (binary)
+  "HasCrCard", "IsActiveMember",
+  # quali.sup
+  "Geography", "Gender", "Card.Type", "Exited"
+)]
+
+cat("PCA input dimensions:", dim(pca_df), "\n")
+str(pca_df)
+
+# ---- 5.2 Run the PCA ----
+res_pca <- PCA(pca_df,
+               scale.unit = TRUE,
+               ncp        = 8,             # keep all components
+               quanti.sup = 9:10,
+               quali.sup  = 11:14,
+               graph      = FALSE)
+
+# ---- 5.3 Eigenvalues + variance explained ----
+cat("\nEigenvalues and variance explained:\n")
+print(round(res_pca$eig, 3))
+
+# Scree plot (variance explained per axis)
+fviz_eig(res_pca,
+         addlabels = TRUE,
+         ncp = 8,
+         barfill = "steelblue", barcolor = "steelblue",
+         linecolor = "tomato") +
+  labs(title = "Scree plot - variance explained by each PC")
+
+# ---- 5.4 Variable correlation circle (PC1 vs PC2) ----
+fviz_pca_var(res_pca,
+             axes = c(1, 2),
+             col.var = "contrib",
+             gradient.cols = c("grey70", "steelblue", "tomato"),
+             repel = TRUE) +
+  labs(title = "Variables on PC1 x PC2")
+
+# Same for PC2 vs PC3 - useful since PC1 will be weak
+fviz_pca_var(res_pca,
+             axes = c(2, 3),
+             col.var = "contrib",
+             gradient.cols = c("grey70", "steelblue", "tomato"),
+             repel = TRUE) +
+  labs(title = "Variables on PC2 x PC3")
+
+# ---- 5.5 Variable contributions to each axis ----
+cat("\nVariable contributions to PC1, PC2, PC3 (%):\n")
+print(round(res_pca$var$contrib[, 1:3], 2))
+
+cat("\nVariable cos2 (quality of representation) on PC1-3:\n")
+print(round(res_pca$var$cos2[, 1:3], 2))
+
+# ---- 5.6 Supplementary qualitative categories on the map ----
+cat("\nCoordinates of supplementary qualitative categories:\n")
+print(round(res_pca$quali.sup$coord[, 1:3], 3))
+
+# ---- 5.7 Individual factor map coloured by Exited ----
+fviz_pca_ind(res_pca,
+             axes = c(1, 2),
+             geom = "point",
+             habillage = pca_df$Exited,
+             palette  = c("steelblue", "tomato"),
+             addEllipses = TRUE,
+             ellipse.type = "confidence",
+             legend.title = "Churn",
+             alpha.ind = 0.4) +
+  labs(title = "Individuals on PC1 x PC2, coloured by churn")
+
+# ---- 5.8 Save the PCA object ----
+saveRDS(res_pca, "res_pca.rds")
+cat("\nPCA object saved to res_pca.rds\n")
+
+cat("\n============================================================\n")
+cat("  END OF STEP 5 - ready for Step 6 (clustering)\n")
+cat("============================================================\n")

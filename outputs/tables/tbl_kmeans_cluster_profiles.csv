@@ -1,0 +1,4 @@
+Cluster_KM,n,CreditScore,Age,Tenure,Balance,NumOfProducts,EstimatedSalary,Satisfaction,PointEarned,ChurnRate_pct
+1,673,653.5,37.9,5.1,14149,2.06,101756,3.03,646,12.6
+2,652,661.2,40.6,5,106963,1.23,98239,1.75,634,25.6
+3,674,639.9,38.7,4.8,107837,1.27,102189,4.25,552,23

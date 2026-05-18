@@ -1,13 +1,13 @@
 # =============================================================================
 # CUSTOMER CHURN ANALYSIS — FINAL SUBMISSION PIPELINE
-# PCA + CLUSTERING + BUSINESS INSIGHTS
+# PCA + CLUSTERING + DATA QUALITY + BUSINESS INSIGHTS
 # =============================================================================
 
 # ── 0. PACKAGES ──────────────────────────────────────────────────────────────
 
 required_pkgs <- c(
   "tidyverse", "FactoMineR", "factoextra",
-  "cluster", "corrplot", "scales"
+  "cluster", "corrplot", "scales", "purrr"
 )
 
 installed <- rownames(installed.packages())
@@ -24,6 +24,7 @@ suppressPackageStartupMessages({
   library(cluster)
   library(corrplot)
   library(scales)
+  library(purrr)
 })
 
 set.seed(2026)
@@ -55,9 +56,9 @@ cat("
 CUSTOMER CHURN ANALYSIS — BANKING PROJECT
 ========================================================
 Objective:
-- Understand drivers of customer churn
+- Understand drivers of churn
+- Detect data quality issues
 - Segment customers using PCA + K-Means
-- Provide actionable business insights
 ========================================================\n")
 
 # ── 3. DATA LOADING ──────────────────────────────────────────────────────────
@@ -81,17 +82,38 @@ df <- raw %>%
                     labels = c("Stayed", "Churned"))
   )
 
-# ── 4. DATA QUALITY CHECK ────────────────────────────────────────────────────
+# =============================================================================
+# ── 4. DATA QUALITY (MISSING VALUES + OUTLIERS) ─────────────────────────────
+# =============================================================================
 
-cat("\nDATA QUALITY SUMMARY:\n")
-cat("Rows:", nrow(df), "\n")
-cat("Columns:", ncol(df), "\n")
-cat("Missing values:", sum(is.na(df)), "\n")
-cat("Churn rate:", round(mean(df$Exited == "Churned") * 100, 2), "%\n")
+cat("\n===== MISSING VALUES =====\n")
+missing_tbl <- colSums(is.na(df))
+print(missing_tbl)
 
-df <- df %>% select(-Complain)
+# Keep only numeric columns for analysis
+num_df <- df %>% select(where(is.numeric))
 
+# ---------------- OUTLIERS (FIXED VERSION) ----------------
+
+iqr_outliers <- function(x) {
+  q1 <- quantile(x, 0.25, na.rm = TRUE)
+  q3 <- quantile(x, 0.75, na.rm = TRUE)
+  iqr <- q3 - q1
+  sum(x < (q1 - 1.5 * iqr) | x > (q3 + 1.5 * iqr), na.rm = TRUE)
+}
+
+outliers_tbl <- map_dfr(names(num_df), function(col) {
+  tibble(
+    variable = col,
+    outliers = iqr_outliers(num_df[[col]])
+  )
+})
+
+write_csv(outliers_tbl, "outputs/tables/outliers_report.csv")
+
+# =============================================================================
 # ── 5. VARIABLES ─────────────────────────────────────────────────────────────
+# =============================================================================
 
 active_vars <- c(
   "CreditScore", "Age", "Tenure", "Balance",
@@ -101,7 +123,9 @@ active_vars <- c(
 
 df_active <- df %>% select(all_of(active_vars))
 
-# ── 6. CORRELATION ANALYSIS ──────────────────────────────────────────────────
+# =============================================================================
+# ── 6. CORRELATION ───────────────────────────────────────────────────────────
+# =============================================================================
 
 cor_mat <- cor(df_active)
 
@@ -111,7 +135,9 @@ corrplot(cor_mat,
          col = colorRampPalette(c("#2C7BB6", "white", "#D7191C"))(200))
 dev.off()
 
+# =============================================================================
 # ── 7. UNIVARIATE ANALYSIS ───────────────────────────────────────────────────
+# =============================================================================
 
 p1 <- df_active %>%
   pivot_longer(everything()) %>%
@@ -122,7 +148,9 @@ p1 <- df_active %>%
 
 save_fig(p1, "fig02_univariate.png")
 
+# =============================================================================
 # ── 8. BOXPLOTS BY CHURN ─────────────────────────────────────────────────────
+# =============================================================================
 
 df_long <- df %>%
   select(all_of(active_vars), Exited) %>%
@@ -137,14 +165,18 @@ p2 <- ggplot(df_long,
 
 save_fig(p2, "fig03_boxplots.png")
 
+# =============================================================================
 # ── 9. STRATIFIED SAMPLING ───────────────────────────────────────────────────
+# =============================================================================
 
 df_sample <- df %>%
   group_by(Exited) %>%
   slice_sample(prop = 0.2) %>%
   ungroup()
 
+# =============================================================================
 # ── 10. PCA ──────────────────────────────────────────────────────────────────
+# =============================================================================
 
 pca_input <- df_sample %>%
   mutate(
@@ -158,14 +190,15 @@ pca_res <- PCA(pca_input, scale.unit = TRUE, graph = FALSE)
 
 cat("\nPCA completed successfully\n")
 
-# Eigenvalues table
+# Eigenvalues
 eig_table <- as.data.frame(pca_res$eig)
 eig_table <- cbind(PC = paste0("PC", 1:nrow(eig_table)), eig_table)
-names(eig_table) <- c("PC", "Eigenvalue", "Variance", "CumulativeVariance")
 
 write_csv(eig_table, "outputs/tables/pca_eigenvalues.csv")
 
+# =============================================================================
 # ── 11. PCA VISUALIZATION ────────────────────────────────────────────────────
+# =============================================================================
 
 ind_coords <- as.data.frame(pca_res$ind$coord)
 ind_coords$Exited <- df_sample$Exited
@@ -178,7 +211,9 @@ p3 <- ggplot(ind_coords,
 
 save_fig(p3, "fig04_pca.png")
 
-# ── 12. K-MEANS CLUSTERING ──────────────────────────────────────────────────
+# =============================================================================
+# ── 12. K-MEANS ──────────────────────────────────────────────────────────────
+# =============================================================================
 
 X_scaled <- scale(df_sample %>% select(all_of(active_vars)))
 
@@ -195,7 +230,9 @@ p4 <- ggplot(ind_coords,
 
 save_fig(p4, "fig05_clusters.png")
 
+# =============================================================================
 # ── 13. CLUSTER PROFILING ────────────────────────────────────────────────────
+# =============================================================================
 
 cluster_profile <- df_sample %>%
   group_by(Cluster) %>%
@@ -211,13 +248,15 @@ cluster_profile <- df_sample %>%
 
 write_csv(cluster_profile, "outputs/tables/cluster_profile.csv")
 
+# =============================================================================
 # ── 14. FINAL INSIGHTS ───────────────────────────────────────────────────────
+# =============================================================================
 
 cat("\n================ FINAL INSIGHTS ================\n")
-cat("- PCA reveals structure in customer behavior\n")
-cat("- Clustering identifies 3 distinct customer segments\n")
-cat("- High churn is associated with lower satisfaction\n")
-cat("- Recommended action: target at-risk cluster with retention strategy\n")
+cat("- Data quality checked (missing values + outliers)\n")
+cat("- PCA reveals customer structure\n")
+cat("- K-Means identifies 3 segments\n")
+cat("- Churn linked to satisfaction and behavior\n")
 cat("==============================================\n")
 
 cat("\n✔ ANALYSIS COMPLETED SUCCESSFULLY\n")

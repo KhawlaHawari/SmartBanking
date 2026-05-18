@@ -1,0 +1,15 @@
+Variable,Type,Role
+CreditScore,quantitative,Active
+Geography,categorical,Supplementary qual.
+Gender,categorical,Supplementary qual.
+Age,quantitative,Active
+Tenure,quantitative,Active
+Balance,quantitative,Active
+NumOfProducts,quantitative,Active
+HasCrCard,binary,Supplementary quant.
+IsActiveMember,binary,Supplementary quant.
+EstimatedSalary,quantitative,Active
+Exited,binary,Supplementary qual. (target)
+Satisfaction.Score,ordinal,Active
+Card.Type,categorical,Supplementary qual.
+Point.Earned,quantitative,Active

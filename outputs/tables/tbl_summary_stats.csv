@@ -1,0 +1,109 @@
+Var1,Var2,Freq
+,  RowNumber,Min.   :    1  
+,  RowNumber,1st Qu.: 2501  
+,  RowNumber,Median : 5000  
+,  RowNumber,Mean   : 5000  
+,  RowNumber,3rd Qu.: 7500  
+,  RowNumber,Max.   :10000  
+,  CustomerId,Min.   :15565701  
+,  CustomerId,1st Qu.:15628528  
+,  CustomerId,Median :15690738  
+,  CustomerId,Mean   :15690941  
+,  CustomerId,3rd Qu.:15753234  
+,  CustomerId,Max.   :15815690  
+,  Surname,Length:10000      
+,  Surname,Class :character  
+,  Surname,Mode  :character  
+,  Surname,NA
+,  Surname,NA
+,  Surname,NA
+, CreditScore,Min.   :350.0  
+, CreditScore,1st Qu.:584.0  
+, CreditScore,Median :652.0  
+, CreditScore,Mean   :650.5  
+, CreditScore,3rd Qu.:718.0  
+, CreditScore,Max.   :850.0  
+, Geography,Length:10000      
+, Geography,Class :character  
+, Geography,Mode  :character  
+, Geography,NA
+, Geography,NA
+, Geography,NA
+,   Gender,Length:10000      
+,   Gender,Class :character  
+,   Gender,Mode  :character  
+,   Gender,NA
+,   Gender,NA
+,   Gender,NA
+,     Age,Min.   :18.00  
+,     Age,1st Qu.:32.00  
+,     Age,Median :37.00  
+,     Age,Mean   :38.92  
+,     Age,3rd Qu.:44.00  
+,     Age,Max.   :92.00  
+,    Tenure,Min.   : 0.000  
+,    Tenure,1st Qu.: 3.000  
+,    Tenure,Median : 5.000  
+,    Tenure,Mean   : 5.013  
+,    Tenure,3rd Qu.: 7.000  
+,    Tenure,Max.   :10.000  
+,   Balance,Min.   :     0  
+,   Balance,1st Qu.:     0  
+,   Balance,Median : 97199  
+,   Balance,Mean   : 76486  
+,   Balance,3rd Qu.:127644  
+,   Balance,Max.   :250898  
+,NumOfProducts,Min.   :1.00  
+,NumOfProducts,1st Qu.:1.00  
+,NumOfProducts,Median :1.00  
+,NumOfProducts,Mean   :1.53  
+,NumOfProducts,3rd Qu.:2.00  
+,NumOfProducts,Max.   :4.00  
+,  HasCrCard,Min.   :0.0000  
+,  HasCrCard,1st Qu.:0.0000  
+,  HasCrCard,Median :1.0000  
+,  HasCrCard,Mean   :0.7055  
+,  HasCrCard,3rd Qu.:1.0000  
+,  HasCrCard,Max.   :1.0000  
+,IsActiveMember,Min.   :0.0000  
+,IsActiveMember,1st Qu.:0.0000  
+,IsActiveMember,Median :1.0000  
+,IsActiveMember,Mean   :0.5151  
+,IsActiveMember,3rd Qu.:1.0000  
+,IsActiveMember,Max.   :1.0000  
+,EstimatedSalary,Min.   :    11.58  
+,EstimatedSalary,1st Qu.: 51002.11  
+,EstimatedSalary,Median :100193.91  
+,EstimatedSalary,Mean   :100090.24  
+,EstimatedSalary,3rd Qu.:149388.25  
+,EstimatedSalary,Max.   :199992.48  
+,    Exited,Min.   :0.0000  
+,    Exited,1st Qu.:0.0000  
+,    Exited,Median :0.0000  
+,    Exited,Mean   :0.2038  
+,    Exited,3rd Qu.:0.0000  
+,    Exited,Max.   :1.0000  
+,   Complain,Min.   :0.0000  
+,   Complain,1st Qu.:0.0000  
+,   Complain,Median :0.0000  
+,   Complain,Mean   :0.2044  
+,   Complain,3rd Qu.:0.0000  
+,   Complain,Max.   :1.0000  
+,Satisfaction Score,Min.   :1.000  
+,Satisfaction Score,1st Qu.:2.000  
+,Satisfaction Score,Median :3.000  
+,Satisfaction Score,Mean   :3.014  
+,Satisfaction Score,3rd Qu.:4.000  
+,Satisfaction Score,Max.   :5.000  
+, Card Type,Length:10000      
+, Card Type,Class :character  
+, Card Type,Mode  :character  
+, Card Type,NA
+, Card Type,NA
+, Card Type,NA
+, Point Earned,Min.   : 119.0  
+, Point Earned,1st Qu.: 410.0  
+, Point Earned,Median : 605.0  
+, Point Earned,Mean   : 606.5  
+, Point Earned,3rd Qu.: 801.0  
+, Point Earned,Max.   :1000.0  

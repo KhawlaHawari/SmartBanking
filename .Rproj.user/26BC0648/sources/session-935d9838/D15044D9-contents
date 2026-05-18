@@ -1,0 +1,96 @@
+# ============================================================
+# STEP 6 - Clustering: K-means + HCPC
+# ============================================================
+# Prerequisites: X_active, churn_s, res_pca in memory.
+# If running standalone:
+#   X_active <- readRDS("X_active.rds")
+#   churn_s  <- readRDS("churn_sample.rds")
+#   res_pca  <- readRDS("res_pca.rds")
+
+library(factoextra)
+library(cluster)
+library(FactoMineR)
+
+# ---- 6.1 Standardize the active matrix for K-means ----
+X_scaled <- scale(X_active)
+
+# ---- 6.2 Determine optimal K - elbow method ----
+set.seed(2026)
+p_wss <- fviz_nbclust(X_scaled, kmeans, method = "wss", k.max = 10) +
+  labs(title = "Optimal K - Elbow (Within Sum of Squares)") +
+  geom_vline(xintercept = 3, linetype = "dashed", colour = "tomato")
+print(p_wss)
+
+# ---- 6.3 Optimal K - average silhouette width ----
+set.seed(2026)
+p_sil <- fviz_nbclust(X_scaled, kmeans, method = "silhouette", k.max = 10) +
+  labs(title = "Optimal K - Average Silhouette Width")
+print(p_sil)
+
+# ---- 6.4 Run K-means with chosen K ----
+# We'll pick K based on the plots above. As a placeholder, K=3.
+K_chosen <- 3
+set.seed(2026)
+km <- kmeans(X_scaled, centers = K_chosen, nstart = 50, iter.max = 100)
+
+cat("\nK-means cluster sizes (K =", K_chosen, "):\n")
+print(table(km$cluster))
+
+cat("\nWithin-cluster SS / Total SS:",
+    round(km$tot.withinss / km$totss, 3), "\n")
+
+# Silhouette of the chosen partition
+sil_km <- silhouette(km$cluster, dist(X_scaled))
+cat("\nMean silhouette width (K-means):",
+    round(mean(sil_km[, 3]), 3), "\n")
+
+# ---- 6.5 K-means cluster profiles (means per variable) ----
+cluster_profile_km <- aggregate(X_active,
+                                by = list(cluster = km$cluster),
+                                FUN = mean)
+cat("\nMean of each active variable per K-means cluster:\n")
+print(round(cluster_profile_km, 2))
+
+# ---- 6.6 Hierarchical clustering via HCPC on PCA scores ----
+# Re-run PCA keeping 4 components (Kaiser); HCPC will use them.
+res_hcpc <- HCPC(res_pca, nb.clust = -1, consol = TRUE, graph = FALSE)
+# nb.clust = -1 means "let HCPC choose automatically".
+
+cat("\nHCPC partition sizes:\n")
+print(table(res_hcpc$data.clust$clust))
+
+# Dendrogram
+fviz_dend(res_hcpc,
+          show_labels = FALSE,
+          rect = TRUE, rect_fill = TRUE,
+          palette = "jco",
+          main = "HCPC dendrogram (Ward linkage on PC1-4)")
+
+# HCPC's automatic description of each cluster
+cat("\nHCPC cluster descriptions (top variables per cluster):\n")
+print(res_hcpc$desc.var$quanti)
+
+# ---- 6.7 Compare K-means vs HCPC partitions ----
+cat("\nCross-table: K-means rows vs HCPC columns\n")
+hcpc_clust <- as.integer(res_hcpc$data.clust$clust)
+print(table(Kmeans = km$cluster, HCPC = hcpc_clust))
+
+# Adjusted Rand index (agreement metric, 1 = perfect, 0 = chance)
+# Install mclust if needed: install.packages("mclust")
+if (requireNamespace("mclust", quietly = TRUE)) {
+  ari <- mclust::adjustedRandIndex(km$cluster, hcpc_clust)
+  cat("\nAdjusted Rand Index (K-means vs HCPC):", round(ari, 3), "\n")
+} else {
+  cat("\n(Install 'mclust' to compute the Adjusted Rand Index.)\n")
+}
+
+# ---- 6.8 Save cluster assignments ----
+churn_s$cluster_km   <- km$cluster
+churn_s$cluster_hcpc <- hcpc_clust
+saveRDS(churn_s,   "churn_sample_clustered.rds")
+saveRDS(km,        "kmeans_result.rds")
+saveRDS(res_hcpc,  "hcpc_result.rds")
+
+cat("\n============================================================\n")
+cat("  END OF STEP 6 - ready for Step 7 (PCA + clusters)\n")
+cat("============================================================\n")

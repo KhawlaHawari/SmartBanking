@@ -1,0 +1,68 @@
+# ============================================================
+# STEP 4 - Exploratory analysis
+# ============================================================
+
+# Prerequisite: churn_s, X_active in memory (from Step 3)
+# Otherwise: churn_s <- readRDS("churn_sample.rds")
+#            X_active <- readRDS("X_active.rds")
+
+# ---- 4.1 Numeric correlation matrix ----
+cor_mat <- cor(X_active, method = "pearson")
+cat("\nPearson correlation matrix (active variables):\n")
+print(round(cor_mat, 2))
+
+# ---- 4.2 Visualize correlations with corrplot ----
+library(corrplot)
+corrplot(cor_mat,
+         method = "color",
+         type   = "upper",
+         addCoef.col = "black",
+         number.cex  = 0.75,
+         tl.col = "black", tl.srt = 45,
+         col = colorRampPalette(c("red", "white", "steelblue"))(200),
+         title = "Correlation matrix - 8 active variables",
+         mar = c(0, 0, 2, 0))
+
+# ---- 4.3 Distribution of each active variable ----
+library(tidyverse)
+X_active %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "value") %>%
+  ggplot(aes(x = value)) +
+  geom_histogram(bins = 30, fill = "steelblue", colour = "white") +
+  facet_wrap(~ variable, scales = "free", ncol = 4) +
+  labs(title = "Distribution of the 8 active variables (sample n=2000)",
+       x = NULL, y = "Count") +
+  theme_minimal()
+
+# ---- 4.4 Distributions split by churn (where does the signal live?) ----
+churn_s %>%
+  select(all_of(c("Exited",
+                  "CreditScore", "Age", "Tenure", "Balance",
+                  "NumOfProducts", "EstimatedSalary",
+                  "Satisfaction.Score", "Point.Earned"))) %>%
+  pivot_longer(-Exited, names_to = "variable", values_to = "value") %>%
+  ggplot(aes(x = Exited, y = value, fill = Exited)) +
+  geom_boxplot(alpha = 0.7, outlier.size = 0.5) +
+  facet_wrap(~ variable, scales = "free_y", ncol = 4) +
+  scale_fill_manual(values = c("Stayed" = "steelblue",
+                               "Churned" = "tomato")) +
+  labs(title = "Active variables split by churn outcome",
+       x = NULL, y = NULL) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+# ---- 4.5 Summary stats by churn group ----
+cat("\nMeans of active variables by churn outcome:\n")
+group_means <- churn_s %>%
+  group_by(Exited) %>%
+  summarise(across(all_of(active_vars), mean), .groups = "drop")
+print(as.data.frame(group_means))
+
+cat("\nMean differences (Churned - Stayed):\n")
+diffs <- as.numeric(group_means[2, -1]) - as.numeric(group_means[1, -1])
+names(diffs) <- active_vars
+print(round(diffs, 2))
+
+cat("\n============================================================\n")
+cat("  END OF STEP 4 - ready for Step 5 (PCA)\n")
+cat("============================================================\n")

@@ -1,0 +1,19 @@
+INFO:     Started server process [48996]
+INFO:     Waiting for application startup.
+2026-03-03 20:21:41,262 | INFO | app.main | Starting application lifespan
+2026-03-03 20:21:41,487 | INFO | app.load_data | Model artifact loaded: segmentation_model.pkl
+2026-03-03 20:21:41,517 | INFO | app.load_data | Model artifact loaded: le_segment.pkl
+2026-03-03 20:21:41,557 | INFO | app.load_data | Model artifact loaded: risk_model.pkl
+2026-03-03 20:21:41,558 | INFO | app.load_data | Model artifact loaded: risk_threshold.pkl
+2026-03-03 20:21:41,968 | INFO | app.load_data | Model artifact loaded: churn_model.pkl
+2026-03-03 20:21:41,999 | INFO | app.load_data | Model artifact loaded: churn_threshold.pkl
+2026-03-03 20:21:42,207 | INFO | app.load_data | Model artifact loaded: action_model.pkl
+2026-03-03 20:21:42,238 | INFO | app.load_data | Model artifact loaded: le_action.pkl
+2026-03-03 20:21:42,240 | INFO | app.load_data | Model artifact loaded: kmeans.pkl
+2026-03-03 20:21:42,241 | INFO | app.load_data | Model artifact loaded: training_metrics.json
+2026-03-03 20:21:42,241 | INFO | app.load_data | Model loading complete. loaded=True
+2026-03-03 20:21:44,534 | INFO | app.load_data | Dataset loaded: bank_customer_dataset.xlsx (4999 rows)
+2026-03-03 20:21:44,625 | INFO | app.load_data | EDA cache computed successfully
+2026-03-03 20:21:44,634 | INFO | app.database | Database initialized
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8012 (Press CTRL+C to quit)

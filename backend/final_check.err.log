@@ -1,0 +1,31 @@
+C:\Users\DELL\Desktop\SmartBankingFinal\smart-banking\backend\app\utils\chat_engine.py:7: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+INFO:     Started server process [90256]
+INFO:     Waiting for application startup.
+2026-03-03 21:07:12,584 | INFO | app.main | Starting application lifespan
+2026-03-03 21:07:12,687 | INFO | app.load_data | Model artifact loaded: segmentation_model.pkl
+2026-03-03 21:07:12,701 | INFO | app.load_data | Model artifact loaded: le_segment.pkl
+2026-03-03 21:07:12,722 | INFO | app.load_data | Model artifact loaded: risk_model.pkl
+2026-03-03 21:07:12,734 | INFO | app.load_data | Model artifact loaded: risk_threshold.pkl
+2026-03-03 21:07:13,004 | INFO | app.load_data | Model artifact loaded: churn_model.pkl
+2026-03-03 21:07:13,017 | INFO | app.load_data | Model artifact loaded: churn_threshold.pkl
+2026-03-03 21:07:13,109 | INFO | app.load_data | Model artifact loaded: action_model.pkl
+2026-03-03 21:07:13,117 | INFO | app.load_data | Model artifact loaded: le_action.pkl
+2026-03-03 21:07:13,118 | INFO | app.load_data | Model artifact loaded: kmeans.pkl
+2026-03-03 21:07:13,118 | INFO | app.load_data | Model artifact loaded: training_metrics.json
+2026-03-03 21:07:13,118 | INFO | app.load_data | Model loading complete. loaded=True
+2026-03-03 21:07:14,179 | INFO | app.load_data | Dataset loaded: bank_customer_dataset.xlsx (4999 rows)
+2026-03-03 21:07:14,209 | INFO | app.load_data | EDA cache computed successfully
+2026-03-03 21:07:14,230 | INFO | app.database | Database initialized
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8023 (Press CTRL+C to quit)
+2026-03-03 21:07:15,565 | WARNING | app.utils.chat_engine | Gemini model not available for key: gemini-1.5-flash
+2026-03-03 21:07:15,652 | WARNING | app.utils.chat_engine | Gemini model not available for key: gemini-1.5-flash-latest
+2026-03-03 21:07:15,730 | WARNING | app.utils.chat_engine | Gemini model not available for key: gemini-pro
